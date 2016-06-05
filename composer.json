@@ -1,0 +1,20 @@
+{
+    "name": "wienkit/beslist-order-api-php-client",
+    "description": "Beslist.nl Order API client PHP",
+    "require": {
+        "phpunit/phpunit": "^5.4"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mark Wienk",
+            "email": "mark@wienkit.nl"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+      "psr-4": {
+        "Wienkit\\BeslistOrdersClient\\": "src/"
+      }
+    }
+}
