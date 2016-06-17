@@ -22,9 +22,9 @@ class BeslistOrdersClient
    */
   public function __construct($personalKey, $shopId, $clientId)
   {
-    $this->personalKey = $personalKey;
-    $this->shopId = $shopId;
-    $this->clientId = $clientId;
+      $this->personalKey = $personalKey;
+      $this->shopId = $shopId;
+      $this->clientId = $clientId;
   }
 
   /**
@@ -33,7 +33,7 @@ class BeslistOrdersClient
    */
   public function setTestMode($mode)
   {
-    $this->testMode = $mode;
+      $this->testMode = $mode;
   }
 
   /**
@@ -42,18 +42,18 @@ class BeslistOrdersClient
    */
   public function setTestModeTotalOrders($total)
   {
-    $this->testNumberOfOrders = $total;
+      $this->testNumberOfOrders = $total;
   }
 
   /**
    * Get BeslistShoppingCart object
    * @return BeslistShoppingCart the data
    */
-  public function getShoppingCartData($fromDate, $toDate)
+  public function getShoppingCartData($fromDate, $toDate, $data = array())
   {
-    $apiResult = $this->makeRequest($fromDate, $toDate);
-    $cart = BeslistDataParser::createEntityFromResponse('BeslistShoppingCart', $apiResult);
-    return $cart;
+      $apiResult = $this->makeRequest($fromDate, $toDate, $data);
+      $cart = BeslistDataParser::createEntityFromResponse('BeslistShoppingCart', $apiResult);
+      return $cart;
   }
 
   /**
@@ -65,48 +65,48 @@ class BeslistOrdersClient
    * @throws BolPlazaClientException
    * @throws BolPlazaClientRateLimitException
    */
-  protected function makeRequest($dateFrom, $dateTo)
+  protected function makeRequest($dateFrom, $dateTo, $testData = array())
   {
-    $method = 'GET';
-    $contentType = 'application/xml';
-    $url = self::BASE_URL;
+      $method = 'GET';
+      $contentType = 'application/xml';
+      $url = self::BASE_URL;
 
-    $data = $this->getRequestData($dateTo, $dateFrom);
+      $data = $this->getRequestData($dateFrom, $dateTo, $testData);
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 60);
-    curl_setopt($ch, CURLOPT_HEADER, false);
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Wienk IT Beslist.nl PHP Client');
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-type: ' . $contentType
-    ]);
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_URL, $url);
+      curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+      curl_setopt($ch, CURLOPT_HEADER, false);
+      curl_setopt($ch, CURLOPT_USERAGENT, 'Wienk IT Beslist.nl PHP Client');
+      curl_setopt($ch, CURLOPT_HTTPHEADER, [
+          'Content-type: ' . $contentType
+      ]);
 
-    if (in_array($method, ['POST', 'PUT', 'DELETE']) && ! is_null($data)) {
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-    } elseif ($method == 'GET' && !empty($data)) {
-        $suffix = "?";
-        foreach ($data as $key => $value) {
-          $suffix .= "&" . $key . '=' . $value;
-        }
-        curl_setopt($ch, CURLOPT_URL, $url . $suffix);
-    }
+      if (in_array($method, ['POST', 'PUT', 'DELETE']) && ! is_null($data)) {
+          curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+      } elseif ($method == 'GET' && !empty($data)) {
+          $suffix = "?";
+          foreach ($data as $key => $value) {
+              $suffix .= "&" . $key . '=' . $value;
+          }
+          curl_setopt($ch, CURLOPT_URL, $url . $suffix);
+      }
 
-    if ($this->skipSslVerification) {
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-    }
+      if ($this->skipSslVerification) {
+          curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+          curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+      }
 
-    $result = curl_exec($ch);
-    $headerInfo = curl_getinfo($ch);
+      $result = curl_exec($ch);
+      $headerInfo = curl_getinfo($ch);
 
-    // $this->checkForErrors($ch, $headerInfo, $result);
+      // $this->checkForErrors($ch, $headerInfo, $result);
 
-    curl_close($ch);
+      curl_close($ch);
 
-    return $result;
+      return $result;
   }
 
   /**
@@ -116,22 +116,26 @@ class BeslistOrdersClient
    * @param string $dateTo
    * @return array of paramaters
    */
-  protected function getRequestData($dateFrom, $dateTo)
+  protected function getRequestData($dateFrom, $dateTo, $testData = array())
   {
-    $checksum = md5($this->personalKey . $this->clientId . $this->shopId . $dateFrom . $dateTo);
-    $result = [
-      'checksum' => $checksum,
-      'shop_id' => $this->shopId,
-      'client_id' => $this->clientId,
-      'date_from' => $dateFrom,
-      'date_to' => $dateTo
-    ];
+      $checksum = md5($this->personalKey . $this->clientId . $this->shopId . $dateFrom . $dateTo);
+      $result = [
+          'checksum' => $checksum,
+          'shop_id' => $this->shopId,
+          'client_id' => $this->clientId,
+          'date_from' => $dateFrom,
+          'date_to' => $dateTo
+      ];
 
-    if($this->testMode) {
-      $result['output_type'] = 'test';
-      $result['test_orders'] = $this->testNumberOfOrders;
-    }
+      if ($this->testMode) {
+          $result['output_type'] = 'test';
+          $result['test_orders'] = $this->testNumberOfOrders;
 
-    return $result;
+          if (!empty($testData)) {
+              $result['test_products'] = json_encode($testData);
+          }
+      }
+
+      return $result;
   }
 }

@@ -10,6 +10,11 @@ class BeslistOrdersClientTest extends PHPUnit_Framework_TestCase
     $shopId = '-- ENTER YOUR SHOP ID --';
     $clientId = '-- ENTER YOUR CLIENT ID --';
 
+    $personalKey = '0e1248cb682c1e274d115bc3e0e5befa';
+    $shopId = '17255';
+    $clientId = '2994';
+
+
     $this->client = new Wienkit\BeslistOrdersClient\BeslistOrdersClient($personalKey, $shopId, $clientId);
     $this->client->setTestMode(true);
   }
@@ -17,6 +22,25 @@ class BeslistOrdersClientTest extends PHPUnit_Framework_TestCase
   public function testShoppingCartRetrieve()
   {
     $cart = $this->client->getShoppingCartData('2016-01-01', '2016-01-02');
+    $this->assertNotEmpty($cart);
+    return $cart;
+  }
+
+  public function testSpecificShoppingCartRetrieve()
+  {
+    $cart = $this->client->getShoppingCartData('2016-01-01', '2016-01-02', array(array(
+      'item_price' => 29.50,
+      'item_shipping' => 2.95,
+      'number_ordered' => 1,
+      'bvb_code' => 8888,
+      'item_size' => 'L',
+      'item_color' => 'Rood',
+      'product_title' => 'Broek',
+      'product_url' => 'www.test.nl/product/2',
+      'commission_percentage' => 2.5,
+      'commission_fixed' => 0.00,
+      'commission' => 2
+    )));
     $this->assertNotEmpty($cart);
     return $cart;
   }
@@ -31,12 +55,31 @@ class BeslistOrdersClientTest extends PHPUnit_Framework_TestCase
   }
 
   /**
+   * @depends testSpecificShoppingCartRetrieve
+   */
+  public function testSpecificCartNumberOfOrders($cart)
+  {
+    $this->assertEquals(count($cart->shopOrders), 1);
+    return $cart->shopOrders[0];
+  }
+
+  /**
    * @depends testNumberOfOrders
    */
   public function testNumberOfProductsInOrder($order)
   {
     $this->assertEquals(count($order->products), 2);
     $this->assertEquals($order->numProducts, count($order->products));
+  }
+
+  /**
+   * @depends testSpecificCartNumberOfOrders
+   */
+  public function testSpecificCartNumberProducts($order)
+  {
+    $this->assertEquals(count($order->products), 1);
+    $this->assertEquals($order->numProducts, count($order->products));
+    $this->assertEquals($order->products[0]->bvb_code, '8888');
   }
 
   public function testShoppingCartRetrieveMultiple()
