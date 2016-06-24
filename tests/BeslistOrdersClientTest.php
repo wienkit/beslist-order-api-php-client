@@ -79,7 +79,7 @@ class BeslistOrdersClientTest extends PHPUnit_Framework_TestCase
   {
     $this->assertEquals(count($order->products), 1);
     $this->assertEquals($order->numProducts, count($order->products));
-    $this->assertEquals($order->products[0]->bvb_code, '8888');
+    $this->assertEquals($order->products[0]->bvbCode, '8888');
   }
 
   public function testShoppingCartRetrieveMultiple()
