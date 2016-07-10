@@ -62,8 +62,6 @@ class BeslistOrdersClient
    * @param string $dateTo the
    * @param string $dateFrom the
    * @return string XML
-   * @throws BolPlazaClientException
-   * @throws BolPlazaClientRateLimitException
    */
   protected function makeRequest($dateFrom, $dateTo, $testData = array())
   {
@@ -101,8 +99,6 @@ class BeslistOrdersClient
 
       $result = curl_exec($ch);
       $headerInfo = curl_getinfo($ch);
-
-      // $this->checkForErrors($ch, $headerInfo, $result);
 
       curl_close($ch);
 
