@@ -6,11 +6,6 @@ namespace Wienkit\BeslistOrdersClient\Entities;
  * Class BeslistOrder
  * @package Wienkit\BeslistOrdersClient\Entities
  *
- * @property string $OrderId
- * @property string $DateTimeCustomer
- * @property string $DateTimeDropShipper
- * @property BolPlazaBuyer $Buyer
- * @property array $OrderItems
  */
 class BeslistOrder extends BaseModel {
 
