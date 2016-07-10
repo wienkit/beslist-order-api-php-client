@@ -10,11 +10,6 @@ class BeslistOrdersClientTest extends PHPUnit_Framework_TestCase
     $shopId = '-- ENTER YOUR SHOP ID --';
     $clientId = '-- ENTER YOUR CLIENT ID --';
 
-    $personalKey = '0e1248cb682c1e274d115bc3e0e5befa';
-    $shopId = '17255';
-    $clientId = '2994';
-
-
     $this->client = new Wienkit\BeslistOrdersClient\BeslistOrdersClient($personalKey, $shopId, $clientId);
     $this->client->setTestMode(true);
   }
