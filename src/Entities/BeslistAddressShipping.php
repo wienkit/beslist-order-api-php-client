@@ -6,6 +6,19 @@ namespace Wienkit\BeslistOrdersClient\Entities;
  * Class BeslistAddressShipping
  * @package Wienkit\BeslistOrdersClient\Entities
  *
+ * @property string $company_name
+ * @property string $company_kvk
+ * @property string $firstName
+ * @property string $lastNameInsertion
+ * @property string $lastName
+ * @property string $address
+ * @property string $addressNumber
+ * @property string $addressNumberAdditional
+ * @property string $city
+ * @property string $zip
+ * @property string $country
+ * @property string $sex
+ * 
  */
 class BeslistAddressShipping extends BaseModel {
 
