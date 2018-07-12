@@ -12,6 +12,8 @@ class BeslistAddressShipping extends BaseModel {
     protected $xmlEntityName = 'shipping';
 
     protected $attributes = [
+        'company_name',
+        'company_kvk',
         'firstName',
         'lastNameInsertion',
         'lastName',
