@@ -6,6 +6,9 @@ namespace Wienkit\BeslistOrdersClient\Entities;
  * Class BeslistShoppingCart
  * @package Wienkit\BeslistOrdersClient\Entities
  *
+ * @property BeslistSummary $summary
+ * @property BeslistOrder[] $shopOrders
+ * 
  */
 class BeslistShoppingCart extends BaseModel {
 

@@ -6,6 +6,9 @@ namespace Wienkit\BeslistOrdersClient\Entities;
  * Class BeslistSummary
  * @package Wienkit\BeslistOrdersClient\Entities
  *
+ * @property int $numResults
+ * @property BeslistSummaryOptions $options
+ * 
  */
 class BeslistSummary extends BaseModel {
 
